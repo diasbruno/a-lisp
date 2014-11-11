@@ -72,6 +72,7 @@ extern "C" {
 
 /*! global environment. */
 lisp_t* lisp_global_env;
+lisp_t* nil;
 
 /*! create types. */
 lisp_t*     lisp_number(int num);
@@ -79,6 +80,10 @@ lisp_t*     lisp_symbol(const char* name);
 lisp_t*     lisp_cons(lisp_t* a, lisp_t* b);
 lisp_t*     lisp_proc(const char* name, lisp_fn_t fn);
 lisp_env_t* lisp_env(const char* name, lisp_t* obj);
+
+/*! environment. */
+lisp_env_t*  lisp_add_env(lisp_env_t* a, lisp_env_t* to);
+unsigned int lisp_find_env(const char* name, lisp_env_t* in, lisp_env_t** out);
 
 #ifdef __cplusplus
 }

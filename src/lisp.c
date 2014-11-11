@@ -62,5 +62,6 @@ lisp_env_t* lisp_env(const char* name, lisp_t* obj)
   lisp_env_t* e = (lisp_env_t*)malloc(sizeof(lisp_env_t));
   with_env_name(e) = cpy_str(name);
   with_env_obj(e) = obj;
+  e->next = NULL;
   return e;
 }
