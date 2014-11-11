@@ -24,6 +24,7 @@ static char* itoa(int num)
 //! Lisp
 
 lisp_t* lisp_number(int num)
+// new lisp number.
 {
   lisp_t* obj = lisp_alloc();
   obj->type = LISP_NUMBER;
@@ -32,6 +33,7 @@ lisp_t* lisp_number(int num)
 }
 
 lisp_t* lisp_symbol(const char* name)
+// new lisp symbol.
 {
   lisp_t* obj = lisp_alloc();
   obj->type = LISP_SYMBOL;
@@ -40,6 +42,7 @@ lisp_t* lisp_symbol(const char* name)
 }
 
 lisp_t* lisp_cons(lisp_t* a, lisp_t* b)
+// new lisp cons.
 {
   lisp_t* obj = lisp_alloc();
   obj->type = LISP_CONS;
@@ -49,6 +52,7 @@ lisp_t* lisp_cons(lisp_t* a, lisp_t* b)
 }
 
 lisp_t* lisp_proc(const char* name, lisp_fn_t fn)
+// new lisp procedure.
 {
   lisp_t* obj = lisp_alloc();
   obj->type = LISP_PROC;
@@ -58,6 +62,7 @@ lisp_t* lisp_proc(const char* name, lisp_fn_t fn)
 }
 
 lisp_env_t* lisp_env(const char* name, lisp_t* obj)
+// new lisp environment.
 {
   lisp_env_t* e = (lisp_env_t*)malloc(sizeof(lisp_env_t));
   with_env_name(e) = cpy_str(name);
