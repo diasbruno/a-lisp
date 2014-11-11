@@ -1,0 +1,34 @@
+builddir = build
+
+gcc = gcc
+gxx = g++
+
+cflags = -arch x86_64 -Wall
+
+valgrind = valgrind --leak-check=full
+
+static_lib = liblisp.a
+
+rule c
+     command = $gcc $cflags -c -I./include $in -o $out
+     description = compiling c $in -> $out...
+
+rule cc
+     command = $gxx $cflags -c -I./include $in -o $out
+     description = compiling c/c++ $in -> $out...
+
+rule link
+     command = ar rcs $builddir/$out $in
+     description = linking $in to $out...
+
+rule test
+     command = $gxx $cflags -I./include -I./tests $builddir/$static_lib $in -o $builddir/$out && $builddir/$out
+     description = building $in...
+
+rule valgrind
+     command = $valgrind $builddir/$in 2> reports/${out}
+     description = running with valgrind $in...
+
+rule rm
+     command = rm -rf $builddir/*
+     description = clearning $builddir
