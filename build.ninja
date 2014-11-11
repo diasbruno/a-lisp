@@ -32,3 +32,17 @@ rule valgrind
 rule rm
      command = rm -rf $builddir/*
      description = clearning $builddir
+
+# objects
+build $builddir/lisp.c.o: c src/lisp.c
+# libraries
+build $static_lib:        link $builddir/lisp.c.o
+# tests
+build test_types:         test tests/units/test_types.cc
+
+build valgrind_types:     valgrind test_types
+
+build make:               phony $static_lib
+build tests:              phony test_types
+build leaks:              phony valgrind_types
+build clean:              rm $builddir
