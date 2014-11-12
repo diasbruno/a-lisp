@@ -70,3 +70,17 @@ lisp_env_t* lisp_env(const char* name, lisp_t* obj)
   e->next = NULL;
   return e;
 }
+
+lisp_t* lisp_worker()
+// new lisp worker (function application).
+{
+  lisp_t* a = lisp_alloc();
+  if (a != NULL) {
+    a->type = LISP_WORKER;
+    with_car(a) = lisp_symbol("_worker");
+    with_cdr(a) = nil;
+  } else {
+    printf("cannot allocate.");
+  }
+  return a;
+}

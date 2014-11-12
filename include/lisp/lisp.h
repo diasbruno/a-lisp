@@ -12,7 +12,8 @@ enum lisp_type
   LISP_NUMBER = 2,
   LISP_STRING = 3,
   LISP_CONS,
-  LISP_PROC
+  LISP_PROC,
+  LISP_WORKER
 };
 
 struct lisp;
@@ -56,6 +57,8 @@ typedef struct lisp
 #define L_IS_CONS(t)   ((t)->type == LISP_CONS)
 #define L_IS_PROC(t)   ((t)->type == LISP_PROC)
 
+#define with_type(x)     (x)->type
+
 #define with_number(x)   (x)->cell.number
 #define with_symbol(x)   (x)->cell.symbol
 #define with_cons(x)     (x)->cell.cons
@@ -80,6 +83,7 @@ lisp_t*     lisp_symbol(const char* name);
 lisp_t*     lisp_cons(lisp_t* a, lisp_t* b);
 lisp_t*     lisp_proc(const char* name, lisp_fn_t fn);
 lisp_env_t* lisp_env(const char* name, lisp_t* obj);
+lisp_t*     lisp_worker();
 
 /*! environment. */
 lisp_env_t*  lisp_add_env(lisp_env_t* a, lisp_env_t* to);

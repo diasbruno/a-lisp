@@ -5,17 +5,28 @@
 
 lisp_env_t* local_env;
 
+static lisp_t* lisp_empty(lisp_t* cons) { printf("calling lisp_empty.\n"); return NULL; }
+static lisp_t* lisp_add(lisp_t* cons) {
+  int ret = 0;
+  lisp_t* args = cons;
+  for (lisp_t* arg = with_cdr(args); arg != nil; arg = with_cdr(arg)) {
+    lisp_t* h   = with_car(arg);
+    ret += with_number(h).nvalue;
+  }
+  return lisp_number(ret);
+}
+
 TEST_CASE("eval null.", "[eval]") {
   lisp_t* r = lisp_eval(NULL, NULL);
   REQUIRE(!r);
 }
 
 TEST_CASE("eval number.", "[eval]") {
-  lisp_t* n = lisp_number(10);
+  lisp_t* n = lisp_number(1);
   lisp_t* r = lisp_eval(n, NULL);
 
   REQUIRE(L_IS_NUMBER(n));
-  REQUIRE(with_number(r).nvalue == 10);
+  REQUIRE(with_number(r).nvalue == 1);
 
   free((void*)n);
 }
@@ -27,6 +38,44 @@ TEST_CASE("eval symbol.", "[eval]") {
   REQUIRE(r == nil);
 
   free((void*)s);
+}
+
+TEST_CASE("eval simple expression.", "[eval]") {
+  lisp_env_t* e;
+  // adding lisp_empty to env.
+  lisp_t* p = lisp_proc((char*)"empty", &lisp_empty);
+  e = lisp_env(with_proc(p).name, p);
+  e = lisp_add_env(e, local_env);
+
+  lisp_t* s = lisp_symbol((char*)"empty");
+  lisp_t* c = lisp_cons(s, nil);
+  lisp_t* r = lisp_eval(c, e);
+
+  REQUIRE(!r);
+
+  free((void*)p);
+  free((void*)s);
+  free((void*)c);
+}
+
+TEST_CASE("eval add expression.", "[eval]") {
+  lisp_env_t* e;
+  // adding lisp_empty to env.
+  lisp_t* p = lisp_proc((char*)"add", &lisp_add);
+  e = lisp_env(with_proc(p).name, p);
+  e = lisp_add_env(e, local_env);
+
+  lisp_t* s = lisp_symbol((char*)"add");
+  lisp_t* a = lisp_number(1);
+  lisp_t* b = lisp_number(2);
+  lisp_t* c = lisp_cons(s, lisp_cons(a, lisp_cons(b, nil)));
+  lisp_t* r = lisp_eval(c, e);
+
+  REQUIRE(with_number(r).nvalue == 3);
+
+  free((void*)p);
+  free((void*)s);
+  free((void*)c);
 }
 
 int main(int argc, char* const argv[])
