@@ -85,6 +85,9 @@ lisp_env_t* lisp_env(const char* name, lisp_t* obj);
 lisp_env_t*  lisp_add_env(lisp_env_t* a, lisp_env_t* to);
 unsigned int lisp_find_env(const char* name, lisp_env_t* in, lisp_env_t** out);
 
+/*! evaluation. */
+lisp_t* lisp_eval(lisp_t* obj, lisp_env_t* env);
+
 #ifdef __cplusplus
 }
 #endif

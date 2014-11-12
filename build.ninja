@@ -35,17 +35,20 @@ rule rm
 
 # objects
 build $builddir/lisp.c.o: c src/lisp.c
-build $builddir/env.c.o: c src/env.c
+build $builddir/env.c.o:  c src/env.c
+build $builddir/eval.c.o: c src/eval.c
 # libraries
-build $static_lib:        link $builddir/lisp.c.o $builddir/env.c.o
+build $static_lib:        link $builddir/lisp.c.o $builddir/env.c.o $builddir/eval.c.o
 # tests
 build test_types:         test tests/units/test_types.cc
 build test_env:           test tests/units/test_env.cc
+build test_eval:          test tests/units/test_eval.cc
 
 build valgrind_types:     valgrind test_types
 build valgrind_env:       valgrind test_env
+build valgrind_eval:      valgrind test_eval
 
 build make:               phony $static_lib
-build tests:              phony test_types test_env
-build leaks:              phony valgrind_types valgrind_env
+build tests:              phony test_types test_env test_eval
+build leaks:              phony valgrind_types valgrind_env valgrind_eval
 build clean:              rm $builddir
