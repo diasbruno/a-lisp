@@ -20,12 +20,19 @@ TEST_CASE("eval number.", "[eval]") {
   free((void*)n);
 }
 
+TEST_CASE("eval symbol.", "[eval]") {
+  lisp_t* s = lisp_symbol((char*)"nil");
+  lisp_t* r = lisp_eval(s, local_env);
+
+  REQUIRE(r == nil);
+
+  free((void*)s);
+}
+
 int main(int argc, char* const argv[])
 {
   // initialize the local_env with lisp 'nil'.
   local_env = lisp_env((char*)"nil", nil);
-
   int result = Catch::Session().run( argc, argv );
-
   return result;
 }
